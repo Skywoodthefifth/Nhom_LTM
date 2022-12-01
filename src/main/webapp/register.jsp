@@ -4,13 +4,12 @@
 <!DOCTYPE HTML>
 <html lang="en" >
 <head>
-
+<%String message = (String)request.getAttribute("message"); %>
     <meta charset="UTF-8">
-    <title>Login</title>
-    <script type="text/javascript">
-    <%String message = (String)request.getAttribute("message"); %>
-    var msg = document.getElementById("message");
-    if(msg!= "null" && msg!= "" && msg!= null) alert(msg); 
+    <title>Register</title>
+    <script type="text/javascript"> 
+    var msg = document.getElementsByName("message");
+    if(msg!= "null" && msg!= "" && msg!= null) alert(msg);
 </script>
     <style>
 
@@ -273,16 +272,17 @@
 
 <body>
 
-<form id="login" action="login" method="post">
-    <h1>Log In</h1>
+<form id="login" action="register" method="post">
+    <h1>Register</h1>
     <fieldset id="inputs">
         <input id="username" name="username" type="text" placeholder="Username" autofocus required>
         <input id="password" name="password" type="password" placeholder="Password" required>
-        <input type="hidden" name="action" value="login">
+        <input id="password" name="re_password" type="password" placeholder="Password" required>
+        <input type="hidden" name="action" value="register">
     </fieldset>
     <fieldset id="actions">
-        <input type="submit" id="submit" value="Log in">
-        <a href="<%=request.getContextPath()%>/BookManagement?action=register">Register</a>
+        <input type="submit" id="submit" value="Register">
+        <a href="<%=request.getContextPath()%>/BookManagement?action=login">Login</a>
     </fieldset>
     <a href="<%=request.getContextPath()%>/BookManagement" id="back">Back to article...</a>
 </form>

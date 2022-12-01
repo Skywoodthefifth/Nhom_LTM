@@ -55,6 +55,8 @@ public class HomeController extends HttpServlet {
         }
 		try {
         switch (action) {
+        	case "/new":
+        		showNewForm(request, response);
         	case "/insert":
         		insertBook(request, response);
         		break;
@@ -68,7 +70,7 @@ public class HomeController extends HttpServlet {
         		updateBook(request, response);
         		break;
             case "register":
-                response.sendRedirect("views/account/register.jsp");
+            	request.getRequestDispatcher("register.jsp").forward(request, response);
                 break;
             case "login": {
                     Cookie arrC[] = request.getCookies();
@@ -112,6 +114,12 @@ public class HomeController extends HttpServlet {
             case "logout":
                 logoutUser(request, response);
                 break;
+            case "/insert":
+        		insertBook(request, response);
+        		break;
+            case "/update":
+        		updateBook(request, response);
+        		break;
 			default:
 				listBook(request, response);
 				break;
@@ -131,6 +139,10 @@ public class HomeController extends HttpServlet {
 				request.setAttribute("ID_Account", account.getID_Account());
 			}
 			List<Book> listBook = bookBO.findAllBook();
+			for (Book b : listBook)
+			{
+				b.setCategory(bookBO.findCategorybyID(b.getID_Category()).getCategory());
+			}
 			request.setAttribute("listBook", listBook);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("BookManagement.jsp");
 			dispatcher.forward(request, response);
@@ -174,8 +186,18 @@ public class HomeController extends HttpServlet {
 			throws SQLException, ServletException, IOException {
 		int id = Integer.parseInt(request.getParameter("id"));
 		Book existingBook = bookBO.findBookById(id);
+		existingBook.setCategory(bookBO.findCategorybyID(existingBook.getID_Category()).getCategory());
 		RequestDispatcher dispatcher = request.getRequestDispatcher("EditBook.jsp");
+		List<BookCategory> Listcate = bookBO.findAllCategory();
 		request.setAttribute("book", existingBook);
+		request.setAttribute("ListCategory", Listcate);
+		dispatcher.forward(request, response);
+	}
+	private void showNewForm(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		RequestDispatcher dispatcher = request.getRequestDispatcher("EditBook.jsp");
+		List<BookCategory> Listcate = bookBO.findAllCategory();
+		request.setAttribute("ListCategory", Listcate);
 		dispatcher.forward(request, response);
 	}
 	public void loginUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -191,15 +213,18 @@ public class HomeController extends HttpServlet {
                 session.setMaxInactiveInterval(3 * 60 * 60);
                 request.setAttribute("check", true);
                 request.setAttribute("username", model.getUsername());
-
+                request.setAttribute("message","");
+                Date datenow = new Date(System.currentTimeMillis());
+                loginhistory log = new loginhistory(model.getID_Account(),datenow);
+                accountBO.insertloginhistory(log);
                 Cookie u = new Cookie("user", username);
                 Cookie p = new Cookie("pass", password);
                 u.setMaxAge(60);
                 p.setMaxAge(60);
                 response.addCookie(u);// luu u va p len tren edge;
                 response.addCookie(p);
-
-                listBook(request,response);
+                
+                response.sendRedirect("BookManagement");
             } else {
                 request.setAttribute("message", "dang nhap that bai. username hoac password khong dung");
                 request.setAttribute("check", false);
@@ -219,13 +244,32 @@ public class HomeController extends HttpServlet {
             
             String username = request.getParameter("username");
             String password = request.getParameter("password");
+            String re_password = request.getParameter("re_password");
+            if(re_password!=password)
+            {
+            	request.setAttribute("message", "dang ky that bai. Mat khau nhap lai khong chinh xac.");
+                request.setAttribute("check", false);
+                System.out.println("dang ky that bai");
+                request.getRequestDispatcher("register.jsp").forward(request, response);
+            } else
+            {
             System.out.println("Username: " + username);
-
+            
+            if(accountBO.findByUsername(username) != null)
+            {
+            	request.setAttribute("message", "dang ky that bai. Ten tai khoan da ton tai.");
+                request.setAttribute("check", false);
+                System.out.println("dang ky that bai");
+                request.getRequestDispatcher("register.jsp").forward(request, response);
+            } else
+            {
+            request.setAttribute("message", "");
             Account account = null;
             account = new Account(username, password);
-
             accountBO.insertAccount(account);
             response.sendRedirect("signup_success.jsp");
+            }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -20,6 +20,7 @@ public interface IBookDAO
     boolean updateBook(Book book);
     BookCategory findCategorybyID(int id);
     BookCategory findCategorybyName(String Category);
+    List<BookCategory> findAllCategory();
     
     
 }

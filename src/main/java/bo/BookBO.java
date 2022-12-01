@@ -65,4 +65,8 @@ public class BookBO
 	{
 		return bookDAO.insertCategory(Category);
 	}
+	public List<BookCategory> findAllCategory()
+	{
+		return bookDAO.findAllCategory();
+	}
 }

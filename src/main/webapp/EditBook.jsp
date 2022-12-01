@@ -52,13 +52,16 @@
 						value="<c:out value='${book.getBook_title()}' />" class="form-control"
 						name="name" required="required">
 				</fieldset>
-
 				<fieldset class="form-group">
-					<label>book Quantity</label> <input type="text"
+					<label>Book Quantity</label> <input type="text"
 						value="<c:out value='${book.getQuantity()}' />" class="form-control"
 						name="quantity">
 				</fieldset>
-
+				<fieldset class="form-group">
+					<label>Category</label> <input type="text"
+						value="<c:out value='${book.getCategory()}' />" class="form-control"
+						name="quantity">
+				</fieldset>
 				<fieldset class="form-group">
 					<label>Publisher</label> <input type="text"
 						value="<c:out value='${book.getPublisher()}' />" class="form-control"
@@ -69,6 +72,12 @@
 						value="<c:out value='${book.getPublish_date()}' />" class="form-control"
 						name="country">
 				</fieldset>
+				<c:if test="${book != null}">
+					<input type="hidden" action = "update">
+				</c:if>
+				<c:if test="${book == null}">
+					<input type="hidden" action = "insert">
+				</c:if>
 				<button type="submit" class="btn btn-success">Save</button>
 				</form>
 			</div>

@@ -25,10 +25,11 @@ public class BookDAO implements IBookDAO
 	private static final String SELECT_BOOK_BY_ID_CATEGORY ="SELECT * FROM BOOK WHERE Id_Category=? ";
 	private static final String DELETE_BOOK_BY_ID = "DELETE FROM BOOK where Id_Book=?";
 	private static final String UPDATE_BOOK_SQL = "UPDATE ACCOUNT SET Book_title=?,ID_Category=?, quantity=?, publisher=?, publish_date=? where Id_Book=?";
-	private static final String SELECT_CATEGORY_BY_ID = "SELECT * FROM CATEGORY where Id_Category=?";
-	private static final String SELECT_CATEGORY_BY_NAME = "SELECT * FROM CATEGORY where Category=?";
-	private static final String INSERT_CATEGORY_SQL = "INSERT INTO CATEGORY" + "(Category) VALUES" + "(?)";
-	private static final String DELETE_CATEGORY_BY_ID = "DELETE FROM CATEGORY where Id_Category=?";
+	private static final String SELECT_CATEGORY_BY_ID = "SELECT * FROM BOOKCATEGORY where Id_Category=?";
+	private static final String SELECT_CATEGORY_BY_NAME = "SELECT * FROM BOOKCATEGORY where Category=?";
+	private static final String INSERT_CATEGORY_SQL = "INSERT INTO BOOKCATEGORY" + "(Category) VALUES" + "(?)";
+	private static final String DELETE_CATEGORY_BY_ID = "DELETE FROM BOOKCATEGORY where Id_Category=?";
+	private static final String SELECT_ALL_CATEGORY = "SELECT * FROM BOOKCATEGORY";
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     Connection connection = null;
 	private DBRepository dbRepository = new DBRepository();
@@ -251,6 +252,29 @@ public class BookDAO implements IBookDAO
           printSQLException(e);
       }
       return BookList;
+	}
+	@Override
+	public List<BookCategory> findAllCategory()
+	{
+		List<BookCategory> BookCategoryList = new ArrayList<>();
+//      accountList = query(SELECT_ALL_ACCOUNT, new AccountMapper());
+//      return accountList;
+      try (PreparedStatement ps = this.connection.prepareStatement(SELECT_ALL_CATEGORY);) {
+          System.out.println(ps);
+          ResultSet rs = ps.executeQuery();
+          while (rs.next()) {
+        	  BookCategory bookcate = null;
+              int ID_Category = rs.getInt("ID_Category");
+              String Category = rs.getString("Category");
+              
+              bookcate = new BookCategory(ID_Category, Category);
+              BookCategoryList.add(bookcate);
+          }
+
+      } catch (SQLException e) {
+          printSQLException(e);
+      }
+      return BookCategoryList;
 	}
 
 	@Override

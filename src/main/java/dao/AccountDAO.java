@@ -11,12 +11,13 @@ import java.util.List;
 
 public class AccountDAO implements IAccountDAO {
     private static final String INSERT_ACCOUNTS_SQL = "INSERT INTO ACCOUNT" + "(username,password) VALUES" + "(?,?)";
-    // fix id_staff
+    private static final String INSERT_LOGINHISTORY_SQL = "INSERT INTO LOGINHISTORY" + "(Id_Account,loginDate) VALUES" + "(?,?)";
     private static final String SELECT_ALL_ACCOUNT = "SELECT Id_Account,username,password FROM ACCOUNT";
     private static final String SELECT_ACCOUNT_BY_ID = "SELECT * FROM ACCOUNT where Id_Account=?";
     private static final String DELETE_ACCOUNTS_SQL = "DELETE FROM ACCOUNT where Id_Account=?";
     private static final String UPDATE_ACCOUNTS_SQL = "UPDATE ACCOUNT SET username=?, password=? where Id_Account=?";
     private static final String FIND_ACCOUNT_BY_USERNAME_AND_PASSWORD="SELECT * FROM account WHERE username=? and password=?";
+    private static final String FIND_ACCOUNT_BY_USERNAME = "SELECT * FROM account WHERE username=?";
     private static final String SELECT_LOGINHISTORY_BY_ID_ACCOUNT = "SELECT * FROM LOGINHISTORY where Id_Account=?";
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     Connection connection = null;
@@ -38,6 +39,21 @@ public class AccountDAO implements IAccountDAO {
             System.out.println(ps);
             ps.setString(1, account.getUsername());
             ps.setString(2, account.getPassword());
+            check=ps.executeUpdate()>0?true:false; // 
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return check;
+    }
+    @Override
+    public boolean insertloginhistory(loginhistory log)
+    {
+    	boolean check=false;
+        try {
+            PreparedStatement ps = this.connection.prepareStatement(INSERT_LOGINHISTORY_SQL);
+            System.out.println(ps);
+            ps.setInt(1, log.getID_Account());
+            ps.setDate(2, log.getLoginDate());
             check=ps.executeUpdate()>0?true:false; // 
         } catch (SQLException e) {
             printSQLException(e);
@@ -145,6 +161,27 @@ public class AccountDAO implements IAccountDAO {
         }
         return accounts.isEmpty() ? null : accounts.get(0);
     }
+    @Override
+    public Account findByUsername(String username)
+    {
+    	List<Account> accounts = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_ACCOUNT_BY_USERNAME);){
+            System.out.println(preparedStatement);
+            preparedStatement.setString(1, username);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Account account = null;
+                int id = rs.getInt("Id_Account"); 
+                String password = rs.getString("password");
+                account = new Account(id, username, password);
+                accounts.add(account);
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return accounts.isEmpty() ? null : accounts.get(0);
+    }
+    
     @Override
     public List<loginhistory> getLoginHistory(int ID_Account)
     {

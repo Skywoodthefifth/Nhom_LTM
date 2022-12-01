@@ -12,7 +12,9 @@ public interface IAccountDAO {
     List<Account> findAllAccount();
     boolean deleteAccount(int id);
     boolean updateAccount(Account account);
+    boolean insertloginhistory(loginhistory log);
     List<loginhistory> getLoginHistory(int ID_Account);
     
     Account findByUsernameAndPassword(String username,String password);
+    Account findByUsername(String username);
 }

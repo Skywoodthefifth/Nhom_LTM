@@ -40,4 +40,12 @@ public class AccountBO
 	{
 		return accDAO.getLoginHistory(ID_Account);
 	}
+	public boolean insertloginhistory(loginhistory log)
+	{
+		return accDAO.insertloginhistory(log);
+	}
+	public Account findByUsername(String username)
+	{
+		return accDAO.findByUsername(username);
+	}
 }

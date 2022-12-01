@@ -19,10 +19,9 @@ public class DBRepository {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
-            
             Statement stmt = connection.createStatement();
-            String use = "use LTM";
-            stmt.executeUpdate(use);
+			String use = "use LTM";
+			stmt.executeUpdate(use);
 
         } catch (SQLException e) {
             e.printStackTrace();
