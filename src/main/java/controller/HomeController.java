@@ -245,11 +245,16 @@ public class HomeController extends HttpServlet {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
             String re_password = request.getParameter("re_password");
-            if(re_password!=password)
+            
+            System.out.println("Username: " + username);
+            System.out.println("Password: " + password);
+            System.out.println("re_password: " + re_password);
+            
+            if(!re_password.equals(password))
             {
             	request.setAttribute("message", "dang ky that bai. Mat khau nhap lai khong chinh xac.");
                 request.setAttribute("check", false);
-                System.out.println("dang ky that bai");
+                System.out.println("dang ky that bai. Mat khau nhap lai khong chinh xac.");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
             } else
             {
@@ -259,7 +264,7 @@ public class HomeController extends HttpServlet {
             {
             	request.setAttribute("message", "dang ky that bai. Ten tai khoan da ton tai.");
                 request.setAttribute("check", false);
-                System.out.println("dang ky that bai");
+                System.out.println("dang ky that bai. Ten tai khoan da ton tai.");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
             } else
             {
