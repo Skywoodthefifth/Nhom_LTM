@@ -5,6 +5,9 @@
 <%
 int ID_Account = (Integer) request.getAttribute("ID_Account");
 %>
+<%
+String username = (String) request.getAttribute("username");
+%>
 <html>
 <head>
 <script>
@@ -63,7 +66,7 @@ p {
 					class="nav-link">Log out</a></li>
 			</ul>
 			<ul class="navbar-nav">
-				<li><a class="nav-link">${username}</a></li>
+				<li><a class="nav-link">Xin chao <%=username%></a></li>
 			</ul>
 			<%
 			}
@@ -77,7 +80,6 @@ p {
 
 	<div class="row">
 		<!-- <div class="alert alert-success" *ngIf='message'>{{message}}</div> -->
-
 		<div class="container">
 			<h3 class="text-center">List of Books</h3>
 			<hr>

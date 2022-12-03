@@ -197,12 +197,20 @@ public class AccountDAO implements IAccountDAO {
             	loginhistory loginHistory = null;
                 Date loginDate = rs.getDate("loginDate");
                 loginHistory = new loginhistory(ID_Account,loginDate);
+                if(LoginHistorys.isEmpty()==false)
+                {
+                if(LoginHistorys.get(LoginHistorys.size() -1).getLoginDate().equals(loginHistory.getLoginDate())== false)
                 LoginHistorys.add(loginHistory);
+                } else
+                {
+                	LoginHistorys.add(loginHistory);
+                }
             }
 
         } catch (SQLException e) {
             printSQLException(e);
         }
+    
         return LoginHistorys;
     }
     

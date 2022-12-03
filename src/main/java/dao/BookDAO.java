@@ -113,12 +113,12 @@ public class BookDAO implements IBookDAO
           while (rs.next()) {
               Book book = null;
               int id = rs.getInt("Id_Book");
-              //String Book_title = rs.getString("Book_title");
+              String Book_title2 = rs.getString("Book_title");
               int ID_Category = rs.getInt("ID_Category");
               int quantity = rs.getInt("quantity");
               String publisher = rs.getString("publisher");
               Date Date = rs.getDate("publish_date");
-              book = new Book(id, Book_title,ID_Category, quantity, publisher, Date);
+              book = new Book(id, Book_title2,ID_Category, quantity, publisher, Date);
               BookList.add(book);
           }
 
