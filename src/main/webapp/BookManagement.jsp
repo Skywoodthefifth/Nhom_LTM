@@ -95,7 +95,7 @@ p {
 					</select> <input type="number" name="searchvalue" id="searchvalue">
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label>Chon the loai
 						sach:</label> <select name="searchvalue2" id="searchvalue2">
-						<option value="all" selected>All</option>
+						<option value="0" selected>All</option>
 						<c:forEach var="cate" items="${ListCategory}">
 							<option value="${cate.getID_Category()}">${cate.getCategory()}</option>
 						</c:forEach>

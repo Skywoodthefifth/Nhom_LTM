@@ -40,12 +40,15 @@ public class BookDAO implements IBookDAO
 		// TODO Auto-generated method stub
 		boolean check=false;
         try {connection = dbRepository.getConnection();
+        
+        	//"INSERT INTO BOOK" + "(Book_title,ID_Category,quantity, publisher, publish_date) VALUES" + "(?,?,?,?,?)"
             PreparedStatement ps = this.connection.prepareStatement(INSERT_BOOKS_SQL);
             System.out.println(ps);
             ps.setString(1, book.getBook_title());
-            ps.setInt(2, book.getQuantity());
-            ps.setString(3, book.getPublisher());
-            ps.setDate(4, book.getPublish_date());
+            ps.setInt(2, book.getID_Category());
+            ps.setInt(3, book.getQuantity());
+            ps.setString(4, book.getPublisher());
+            ps.setDate(5, book.getPublish_date());
             check=ps.executeUpdate()>0?true:false; // 
         } catch (SQLException e) {
             printSQLException(e);
@@ -320,6 +323,7 @@ public class BookDAO implements IBookDAO
             preparedStatement.setInt(3, book.getQuantity());
             preparedStatement.setString(4, book.getPublisher());
             preparedStatement.setDate(5, book.getPublish_date());
+            
             preparedStatement.setInt(6, book.getID_Book());
             check = (preparedStatement.executeUpdate() > 0);
         } catch (SQLException exception) {

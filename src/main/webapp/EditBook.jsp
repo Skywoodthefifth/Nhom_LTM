@@ -46,14 +46,14 @@
 				<c:if test="${book != null}">
 					<fieldset class="form-group">
 						<label>ID_Book</label> <input type="text" name="ID_Book"
-							value="<c:out value='${book.getID_book()}' />" readonly />
+							value="<c:out value='${book.getID_Book()}' />" readonly />
 					</fieldset>
 				</c:if>
 
 				<fieldset class="form-group">
 					<label>Book Name</label> <input type="text"
 						value="<c:out value='${book.getBook_title()}' />"
-						class="form-control" name="name" required="required">
+						class="form-control" name="Book_title" required="required">
 				</fieldset>
 				<fieldset class="form-group">
 					<label>Book Quantity</label> <input type="text"
@@ -82,15 +82,15 @@
 						class="form-control" name="publisher">
 				</fieldset>
 				<fieldset class="form-group">
-					<label>Publish date</label> <input type="text"
+					<label>Publish date</label> <input type="date"
 						value="<c:out value='${book.getPublish_date()}' />"
-						class="form-control" name="country">
+						class="form-control" name="publish_date">
 				</fieldset>
 				<c:if test="${book != null}">
-					<input type="hidden" action="update">
+					<input type="hidden" name="action" value="update">
 				</c:if>
 				<c:if test="${book == null}">
-					<input type="hidden" action="insert">
+					<input type="hidden" name="action" value="insert">
 				</c:if>
 				<button type="submit" class="btn btn-success">Save</button>
 				</form>
