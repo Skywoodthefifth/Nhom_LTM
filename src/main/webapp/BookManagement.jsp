@@ -62,6 +62,9 @@ p {
 				<li><a href="<%=request.getContextPath()%>/?action=logout"
 					class="nav-link">Log out</a></li>
 			</ul>
+			<ul class="navbar-nav">
+				<li><a class="nav-link">${username}</a></li>
+			</ul>
 			<%
 			}
 			%>
@@ -100,6 +103,7 @@ p {
 							<option value="${cate.getID_Category()}">${cate.getCategory()}</option>
 						</c:forEach>
 					</select>
+					<input type="hidden" name="action" value="search">
 					<button type="submit" class="btn btn-success">Search</button>
 				</form>
 
@@ -151,5 +155,30 @@ p {
 
 			</table>
 		</div>
+				<%
+				if (ID_Account != -1) {
+				%>
+				<br>
+				<br>
+				<div class="container">
+				<h3 class="text-center">Lich su dang nhap cua tai khoan</h3>
+				<hr>
+				<br>
+					<table class="table table-bordered">
+					<thead>
+					<tr>
+					<th>Ngay dang nhap</th>
+					</tr>
+					</thead>
+					<tbody>
+
+					<c:forEach var="date" items="${loginhistory}">
+
+					<tr>
+						<td><c:out value="${date.getLoginDate()}" /></td>
+					</tr>
+					</c:forEach>
+				
+				<%} %>
 </body>
 </html>

@@ -93,6 +93,8 @@ public class BookDAO implements IBookDAO
 	        } catch (SQLException e) {
 	            printSQLException(e);
 	        }
+	        
+	        
 	        return book;
 	}
 
