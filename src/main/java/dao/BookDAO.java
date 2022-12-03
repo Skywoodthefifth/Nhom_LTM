@@ -24,7 +24,7 @@ public class BookDAO implements IBookDAO
 	private static final String SELECT_BOOK_BY_PUBLISHER ="SELECT * FROM BOOK WHERE publisher=? ";
 	private static final String SELECT_BOOK_BY_ID_CATEGORY ="SELECT * FROM BOOK WHERE Id_Category=? ";
 	private static final String DELETE_BOOK_BY_ID = "DELETE FROM BOOK where Id_Book=?";
-	private static final String UPDATE_BOOK_SQL = "UPDATE ACCOUNT SET Book_title=?,ID_Category=?, quantity=?, publisher=?, publish_date=? where Id_Book=?";
+	private static final String UPDATE_BOOK_SQL = "UPDATE BOOK SET Book_title=?,ID_Category=?, quantity=?, publisher=?, publish_date=? where Id_Book=?";
 	private static final String SELECT_CATEGORY_BY_ID = "SELECT * FROM BOOKCATEGORY where Id_Category=?";
 	private static final String SELECT_CATEGORY_BY_NAME = "SELECT * FROM BOOKCATEGORY where Category=?";
 	private static final String INSERT_CATEGORY_SQL = "INSERT INTO BOOKCATEGORY" + "(Category) VALUES" + "(?)";
