@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page import= "bean.*" %>
+<%@ page import="bean.*"%>
 <html>
 <head>
 <title>Book Management</title>
@@ -16,7 +16,8 @@
 		<nav class="navbar navbar-expand-md navbar-dark"
 			style="background-color: orange">
 			<div>
-				<a href="<%=request.getContextPath()%>/BookManagement" class="navbar-brand"> Book Management </a>
+				<a href="<%=request.getContextPath()%>/BookManagement"
+					class="navbar-brand"> Book Management </a>
 			</div>
 		</nav>
 	</header>
@@ -43,54 +44,53 @@
 				</caption>
 
 				<c:if test="${book != null}">
-				<fieldset class="form-group">
-					<label>ID_Book</label> 
-					<input type="text" name="ID_Book" value="<c:out value='${book.getID_book()}' />" readonly/>
-				</fieldset>
+					<fieldset class="form-group">
+						<label>ID_Book</label> <input type="text" name="ID_Book"
+							value="<c:out value='${book.getID_book()}' />" readonly />
+					</fieldset>
 				</c:if>
 
 				<fieldset class="form-group">
 					<label>Book Name</label> <input type="text"
-						value="<c:out value='${book.getBook_title()}' />" class="form-control"
-						name="name" required="required">
+						value="<c:out value='${book.getBook_title()}' />"
+						class="form-control" name="name" required="required">
 				</fieldset>
 				<fieldset class="form-group">
 					<label>Book Quantity</label> <input type="text"
-						value="<c:out value='${book.getQuantity()}' />" class="form-control"
-						name="quantity">
+						value="<c:out value='${book.getQuantity()}' />"
+						class="form-control" name="quantity">
 				</fieldset>
 				<fieldset class="form-group">
-					<label>Category</label> 
-					
-					<select name="Category" id="Category" class="form-control">
-					<c:forEach var="cate" items="${ListCategory}">
-					
-					<c:if test="${cate.getCategory() == book.getCategory()}">
-    				<option value="${cate.getCategory()}" selected>${cate.getCategory()}</option>
-    				</c:if>
-    				
-    				<c:if test="${cate.getCategory() != book.getCategory()}">
-    				<option value="${cate.getCategory()}">${cate.getCategory()}</option>
-    				</c:if>
-    				
-    				</c:forEach>
-  </select>
+					<label>Category</label> <select name="Category" id="Category"
+						class="form-control">
+						<c:forEach var="cate" items="${ListCategory}">
+
+							<c:if test="${cate.getCategory() == book.getCategory()}">
+								<option value="${cate.getCategory()}" selected>${cate.getCategory()}</option>
+							</c:if>
+
+							<c:if test="${cate.getCategory() != book.getCategory()}">
+								<option value="${cate.getCategory()}">${cate.getCategory()}</option>
+							</c:if>
+
+						</c:forEach>
+					</select>
 				</fieldset>
 				<fieldset class="form-group">
 					<label>Publisher</label> <input type="text"
-						value="<c:out value='${book.getPublisher()}' />" class="form-control"
-						name="publisher">
+						value="<c:out value='${book.getPublisher()}' />"
+						class="form-control" name="publisher">
 				</fieldset>
 				<fieldset class="form-group">
 					<label>Publish date</label> <input type="text"
-						value="<c:out value='${book.getPublish_date()}' />" class="form-control"
-						name="country">
+						value="<c:out value='${book.getPublish_date()}' />"
+						class="form-control" name="country">
 				</fieldset>
 				<c:if test="${book != null}">
-					<input type="hidden" action = "update">
+					<input type="hidden" action="update">
 				</c:if>
 				<c:if test="${book == null}">
-					<input type="hidden" action = "insert">
+					<input type="hidden" action="insert">
 				</c:if>
 				<button type="submit" class="btn btn-success">Save</button>
 				</form>
