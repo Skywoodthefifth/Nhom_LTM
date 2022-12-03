@@ -4,7 +4,7 @@ import java.sql.Date;
 
 public class loginhistory 
 {
-	private int ID_History;
+	private int ID_History = 0;
 	private int ID_Account;
 	private Date loginDate;
 	
@@ -14,6 +14,7 @@ public class loginhistory
 	public void setID_History(int iD_History) {
 		ID_History = iD_History;
 	}
+	
 	public int getID_Account() {
 		return ID_Account;
 	}
@@ -37,6 +38,5 @@ public class loginhistory
 		ID_Account = iD_Account;
 		this.loginDate = loginDate;
 	}
-	
 	
 }

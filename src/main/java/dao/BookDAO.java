@@ -99,7 +99,7 @@ public class BookDAO implements IBookDAO
 	}
 
 	@Override
-	public List<Book> findBooksByBook_title(String _Book_title) {
+	public List<Book> findBooksByBook_title(String Book_title) {
 		// TODO Auto-generated method stub
 		List<Book> BookList = new ArrayList<>();
 //      accountList = query(SELECT_ALL_ACCOUNT, new AccountMapper());
@@ -107,18 +107,18 @@ public class BookDAO implements IBookDAO
 		try {Connection connection = this.connection;
             PreparedStatement ps = connection.prepareStatement(SELECT_BOOK_BY_BOOK_TITLE);
             System.out.println(ps);
-            ps.setString(1, "%" + _Book_title + "%");
+            ps.setString(1, "%" + Book_title + "%");
             System.out.println(ps);
             ResultSet rs = ps.executeQuery();
           while (rs.next()) {
               Book book = null;
               int id = rs.getInt("Id_Book");
-              String Book_title = rs.getString("Book_title");
+              String Book_title2 = rs.getString("Book_title");
               int ID_Category = rs.getInt("ID_Category");
               int quantity = rs.getInt("quantity");
               String publisher = rs.getString("publisher");
               Date Date = rs.getDate("publish_date");
-              book = new Book(id, Book_title,ID_Category, quantity, publisher, Date);
+              book = new Book(id, Book_title2,ID_Category, quantity, publisher, Date);
               BookList.add(book);
           }
 

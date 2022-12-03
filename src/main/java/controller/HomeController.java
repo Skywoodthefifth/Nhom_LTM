@@ -180,7 +180,9 @@ public class HomeController extends HttpServlet {
 			request.setAttribute("ID_Account", account.getID_Account());
 			LHs = accountBO.getLoginHistory(account.getID_Account());
 			request.setAttribute("loginhistory", LHs);
-			request.setAttribute("username", account.getUsername());
+			String usernamee = accountBO.findAccountById(account.getID_Account()).getUsername();
+			System.out.print("I am username: " + usernamee);
+			request.setAttribute("username", usernamee);
 		}
 		
 		if (transper == 0)
