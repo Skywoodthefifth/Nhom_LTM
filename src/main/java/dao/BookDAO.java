@@ -20,7 +20,7 @@ public class BookDAO implements IBookDAO
 	private static final String INSERT_BOOKS_SQL = "INSERT INTO BOOK" + "(Book_title,ID_Category,quantity, publisher, publish_date) VALUES" + "(?,?,?,?,?)";
 	private static final String SELECT_ALL_BOOK = "SELECT * FROM BOOK";
 	private static final String SELECT_BOOK_BY_ID = "SELECT * FROM BOOK where Id_Book=?";
-	private static final String SELECT_BOOK_BY_BOOK_TITLE ="SELECT * FROM BOOK WHERE Book_title=? ";
+	private static final String SELECT_BOOK_BY_BOOK_TITLE ="SELECT * FROM BOOK WHERE Book_title LIKE ? ";
 	private static final String SELECT_BOOK_BY_PUBLISHER ="SELECT * FROM BOOK WHERE publisher=? ";
 	private static final String SELECT_BOOK_BY_ID_CATEGORY ="SELECT * FROM BOOK WHERE Id_Category=? ";
 	private static final String DELETE_BOOK_BY_ID = "DELETE FROM BOOK where Id_Book=?";
@@ -31,18 +31,19 @@ public class BookDAO implements IBookDAO
 	private static final String DELETE_CATEGORY_BY_ID = "DELETE FROM BOOKCATEGORY where Id_Category=?";
 	private static final String SELECT_ALL_CATEGORY = "SELECT * FROM BOOKCATEGORY";
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    Connection connection = null;
+	static Connection connection = null;
 	private DBRepository dbRepository = new DBRepository();
 
     public BookDAO() {
-        connection = dbRepository.getConnection();
+    	connection = dbRepository.getConnection();
+        
     }
 
 	@Override
 	public boolean insertBook(Book book) {
 		// TODO Auto-generated method stub
 		boolean check=false;
-        try {
+        try {connection = dbRepository.getConnection();
             PreparedStatement ps = this.connection.prepareStatement(INSERT_BOOKS_SQL);
             System.out.println(ps);
             ps.setString(1, book.getBook_title());
@@ -59,7 +60,7 @@ public class BookDAO implements IBookDAO
 	public boolean insertCategory(String Category)
 	{
 		boolean check=false;
-        try {
+        try {connection = dbRepository.getConnection();
             PreparedStatement ps = this.connection.prepareStatement(INSERT_CATEGORY_SQL);
             System.out.println(ps);
             ps.setString(1, Category);
@@ -75,7 +76,7 @@ public class BookDAO implements IBookDAO
 		// TODO Auto-generated method stub
 		Book book = null;
 	       // return (Account) query(SELECT_ACCOUNT_BY_ID, new AccountMapper(), id);
-	        try (Connection connection = this.connection) {
+	        try {Connection connection = this.connection;
 	            PreparedStatement ps = connection.prepareStatement(SELECT_BOOK_BY_ID);
 	            System.out.println(ps);
 	            ps.setInt(1, id);
@@ -102,10 +103,10 @@ public class BookDAO implements IBookDAO
 		List<Book> BookList = new ArrayList<>();
 //      accountList = query(SELECT_ALL_ACCOUNT, new AccountMapper());
 //      return accountList;
-		try (Connection connection = this.connection) {
+		try {Connection connection = this.connection;
             PreparedStatement ps = connection.prepareStatement(SELECT_BOOK_BY_BOOK_TITLE);
             System.out.println(ps);
-            ps.setString(1, Book_title);
+            ps.setString(1, "%" + Book_title + "%");
             System.out.println(ps);
             ResultSet rs = ps.executeQuery();
           while (rs.next()) {
@@ -132,7 +133,7 @@ public class BookDAO implements IBookDAO
 		List<Book> BookList = new ArrayList<>();
 //      accountList = query(SELECT_ALL_ACCOUNT, new AccountMapper());
 //      return accountList;
-		try (Connection connection = this.connection) {
+		try {Connection connection = this.connection;
             PreparedStatement ps = connection.prepareStatement(SELECT_BOOK_BY_PUBLISHER);
             System.out.println(ps);
             ps.setString(1, publisher);
@@ -160,7 +161,7 @@ public class BookDAO implements IBookDAO
 	{
 		BookCategory cate = null;
 	       // return (Account) query(SELECT_ACCOUNT_BY_ID, new AccountMapper(), id);
-	        try (Connection connection = this.connection) {
+	        try {Connection connection = this.connection;
 	            PreparedStatement ps = connection.prepareStatement(SELECT_CATEGORY_BY_ID);
 	            System.out.println(ps);
 	            ps.setInt(1, id);
@@ -181,7 +182,7 @@ public class BookDAO implements IBookDAO
 	{
 		BookCategory cate = null;
 	       // return (Account) query(SELECT_ACCOUNT_BY_ID, new AccountMapper(), id);
-	        try (Connection connection = this.connection) {
+	        try {Connection connection = this.connection;
 	            PreparedStatement ps = connection.prepareStatement(SELECT_CATEGORY_BY_NAME);
 	            System.out.println(ps);
 	            ps.setString(1, Category);
@@ -199,12 +200,12 @@ public class BookDAO implements IBookDAO
 	}
 	
 	@Override
-	public List<Book> findBooksById_Category(int Id_Category)
+	public List<Book> findBooksById_Category(int Id_Category, List<Book> books)
 	{
 		List<Book> BookList = new ArrayList<>();
 //      accountList = query(SELECT_ALL_ACCOUNT, new AccountMapper());
 //      return accountList;
-		try (Connection connection = this.connection) {
+		try {Connection connection = this.connection;
             PreparedStatement ps = connection.prepareStatement(SELECT_BOOK_BY_ID_CATEGORY);
             System.out.println(ps);
             ps.setInt(1, Id_Category);
@@ -218,7 +219,10 @@ public class BookDAO implements IBookDAO
               String publisher = rs.getString("publisher");
               Date Date = rs.getDate("publish_date");
               book = new Book(id, Book_title,Id_Category, quantity, publisher, Date);
-              BookList.add(book);
+              for(Book b: books)
+              {
+              if(book.getID_Book()==b.getID_Book()) BookList.add(book);
+              }
           }
 
       } catch (SQLException e) {
@@ -233,7 +237,9 @@ public class BookDAO implements IBookDAO
 		List<Book> BookList = new ArrayList<>();
 //      accountList = query(SELECT_ALL_ACCOUNT, new AccountMapper());
 //      return accountList;
-      try (PreparedStatement ps = this.connection.prepareStatement(SELECT_ALL_BOOK);) {
+      try 
+      {	  connection = dbRepository.getConnection();
+    	  PreparedStatement ps = this.connection.prepareStatement(SELECT_ALL_BOOK);
           System.out.println(ps);
           ResultSet rs = ps.executeQuery();
           while (rs.next()) {
@@ -259,7 +265,8 @@ public class BookDAO implements IBookDAO
 		List<BookCategory> BookCategoryList = new ArrayList<>();
 //      accountList = query(SELECT_ALL_ACCOUNT, new AccountMapper());
 //      return accountList;
-      try (PreparedStatement ps = this.connection.prepareStatement(SELECT_ALL_CATEGORY);) {
+      try {
+    	  PreparedStatement ps = this.connection.prepareStatement(SELECT_ALL_CATEGORY);
           System.out.println(ps);
           ResultSet rs = ps.executeQuery();
           while (rs.next()) {

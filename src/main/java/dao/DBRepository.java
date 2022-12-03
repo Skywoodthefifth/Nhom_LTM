@@ -7,9 +7,10 @@ import java.sql.Statement;
 
 public class DBRepository {
     
-	private String jdbcURL = "jdbc:mysql://localhost:3306/?user=root";
-    private String jdbcUsername = "root";
-    private String jdbcPassword = "";
+	public String jdbcURL = "jdbc:mysql://localhost:3306/";
+    public String jdbcUsername = "root";
+    public String unicode="autoReconnect=true";
+    public String jdbcPassword = "";
 
     public DBRepository() {
     }
@@ -18,10 +19,11 @@ public class DBRepository {
         Connection connection = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
+            
             connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
             Statement stmt = connection.createStatement();
-			String use = "use LTM";
-			stmt.executeUpdate(use);
+    		String use = "use LTM";
+    		stmt.executeUpdate(use);
 
         } catch (SQLException e) {
             e.printStackTrace();

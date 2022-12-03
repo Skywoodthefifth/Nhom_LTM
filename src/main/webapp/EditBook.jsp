@@ -1,8 +1,7 @@
-
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page import= "bean.*" %>
 <html>
 <head>
 <title>Book Management</title>
@@ -44,7 +43,10 @@
 				</caption>
 
 				<c:if test="${book != null}">
-					<input type="hidden" name="id" value="<c:out value='${book.getID_book()}' />" />
+				<fieldset class="form-group">
+					<label>ID_Book</label> 
+					<input type="text" name="ID_Book" value="<c:out value='${book.getID_book()}' />" readonly/>
+				</fieldset>
 				</c:if>
 
 				<fieldset class="form-group">
@@ -58,9 +60,21 @@
 						name="quantity">
 				</fieldset>
 				<fieldset class="form-group">
-					<label>Category</label> <input type="text"
-						value="<c:out value='${book.getCategory()}' />" class="form-control"
-						name="quantity">
+					<label>Category</label> 
+					
+					<select name="Category" id="Category" class="form-control">
+					<c:forEach var="cate" items="${ListCategory}">
+					
+					<c:if test="${cate.getCategory() == book.getCategory()}">
+    				<option value="${cate.getCategory()}" selected>${cate.getCategory()}</option>
+    				</c:if>
+    				
+    				<c:if test="${cate.getCategory() != book.getCategory()}">
+    				<option value="${cate.getCategory()}">${cate.getCategory()}</option>
+    				</c:if>
+    				
+    				</c:forEach>
+  </select>
 				</fieldset>
 				<fieldset class="form-group">
 					<label>Publisher</label> <input type="text"

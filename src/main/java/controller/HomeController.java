@@ -45,27 +45,20 @@ public class HomeController extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		response.setContentType("text/html;charset=UTF-8");
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
 		String action = request.getParameter("action");
+		String action2 = request.getServletPath();
 		if (action == null) {
             action = "";
         }
 		try {
         switch (action) {
-        	case "/new":
-        		showNewForm(request, response);
         	case "/insert":
         		insertBook(request, response);
         		break;
-        	case "/delete":
-        		deleteBook(request, response);
-        		break;
-        	case "/edit":
-				showEditForm(request, response);
-				break;
         	case "/update":
         		updateBook(request, response);
         		break;
@@ -89,7 +82,31 @@ public class HomeController extends HttpServlet {
 				break;
         }
 		} catch (Exception ex) {
-			throw new ServletException(ex);
+			System.out.print(ex);
+			System.out.print(1);
+		}
+		
+		try 
+		{
+		switch(action2)
+		{
+		case "/edit":
+			showEditForm(request, response);
+			break;
+		case "/delete":
+    		deleteBook(request, response);
+    		break;
+		case "/new":
+    		showNewForm(request, response);
+    		break;
+		case "/search":
+			int proverty = Integer.parseInt(request.getParameter("proverty"));
+			searchObject(request, response,proverty); //1 = searchMa, 2= searchTen, 3= searchTenHangSX, lay tu radio button or choose.
+			break;
+		}
+		} catch (Exception ex) {
+			System.out.print(ex);
+			System.out.print(2);
 		}
 	}
 
@@ -100,6 +117,7 @@ public class HomeController extends HttpServlet {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
 		String action = request.getParameter("action");
+		String action2 = request.getServletPath();
         System.out.println("Welcome home get in");
 		if(action == null) action = "";
 		try {
@@ -124,13 +142,19 @@ public class HomeController extends HttpServlet {
 				listBook(request, response);
 				break;
 			}
-		} catch (SQLException ex) {
-			throw new ServletException(ex);
+		} 
+		catch (Exception ex) 
+		{
+			System.out.print(ex);
+			System.out.print(3);
 		}
+		
+		
 	}
 	private void listBook(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, IOException, ServletException
 			{
+			RequestDispatcher dispatcher = request.getRequestDispatcher("BookManagement.jsp");
 			HttpSession session = request.getSession();
 			Account account = (Account) session.getAttribute("account");
 			if (account == null) {
@@ -138,13 +162,16 @@ public class HomeController extends HttpServlet {
 			} else {
 				request.setAttribute("ID_Account", account.getID_Account());
 			}
-			List<Book> listBook = bookBO.findAllBook();
+			List<Book> listBook = null;
+			if(request.getServletPath()!="/search")
+				listBook = bookBO.findAllBook();
 			for (Book b : listBook)
 			{
 				b.setCategory(bookBO.findCategorybyID(b.getID_Category()).getCategory());
 			}
 			request.setAttribute("listBook", listBook);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("BookManagement.jsp");
+			List<BookCategory> Listcate = bookBO.findAllCategory();
+			request.setAttribute("ListCategory", Listcate);
 			dispatcher.forward(request, response);
 			}
 	
@@ -164,13 +191,14 @@ public class HomeController extends HttpServlet {
 	private void updateBook(HttpServletRequest request, HttpServletResponse response) 
 			throws SQLException, IOException
 			{
+				int ID_Book = Integer.parseInt(request.getParameter("ID_Book"));
 				String Book_title = request.getParameter("Book_title");
 				int quantity = Integer.parseInt(request.getParameter("quantity"));
 				String publisher = request.getParameter("publisher");
 				Date publish_date = Date.valueOf(request.getParameter("publish_date"));
 				String Category = request.getParameter("Category");
 				int ID_Category = bookBO.findCategorybyName(Category).getID_Category();
-				Book b = new Book(Book_title,ID_Category, quantity, publisher, publish_date);
+				Book b = new Book(ID_Book,Book_title,ID_Category, quantity, publisher, publish_date);
 				bookBO.updateBook(b);
 				response.sendRedirect("BookManagement");
 			}
@@ -184,24 +212,31 @@ public class HomeController extends HttpServlet {
 	
 	private void showEditForm(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, ServletException, IOException {
-		int id = Integer.parseInt(request.getParameter("id"));
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("EditBook.jsp");
+		System.out.println("edit");
+		int id = Integer.parseInt(request.getParameter("ID_Book"));
 		Book existingBook = bookBO.findBookById(id);
 		existingBook.setCategory(bookBO.findCategorybyID(existingBook.getID_Category()).getCategory());
-		RequestDispatcher dispatcher = request.getRequestDispatcher("EditBook.jsp");
 		List<BookCategory> Listcate = bookBO.findAllCategory();
 		request.setAttribute("book", existingBook);
 		request.setAttribute("ListCategory", Listcate);
 		dispatcher.forward(request, response);
+		
+		return;
 	}
 	private void showNewForm(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		RequestDispatcher dispatcher = request.getRequestDispatcher("EditBook.jsp");
+		System.out.println("new");
 		List<BookCategory> Listcate = bookBO.findAllCategory();
 		request.setAttribute("ListCategory", Listcate);
 		dispatcher.forward(request, response);
+		return;
 	}
 	public void loginUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+        	System.out.println("login");
             request.setAttribute("message", null);
             Account model = null;
             String username = request.getParameter("username");
@@ -238,10 +273,10 @@ public class HomeController extends HttpServlet {
 
     }
 
-    public void register(HttpServletRequest request, HttpServletResponse response)
+	public void register(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            
+        	System.out.println("register");
             String username = request.getParameter("username");
             String password = request.getParameter("password");
             String re_password = request.getParameter("re_password");
@@ -282,9 +317,41 @@ public class HomeController extends HttpServlet {
 
     public void logoutUser(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+    	System.out.println("logout");
         HttpSession session = request.getSession();
         session.removeAttribute("account");
-        response.sendRedirect(request.getContextPath() + "/home");
+        session.removeAttribute("username");
+        response.sendRedirect("BookManagement");
     }
+    
+    private void searchObject(HttpServletRequest request, HttpServletResponse response, int proverty)
+			throws SQLException, IOException, ServletException
+			{
+		RequestDispatcher dispatcher = request.getRequestDispatcher("HomeController.jsp");
+		List<Book> books = bookBO.findAllBook();
+		List<Book> booklist = null;
+		if(proverty == 1)
+		{
+			
+			String IDString = request.getParameter("searchvalue");
+			if (IDString.equals("") == false)
+			{
+			books = null;
+			int id = Integer.parseInt(IDString);// cai o dien thong tin de search
+			books.add(bookBO.findBookById(id));
+			}
+			
+		} else if(proverty == 2)
+		{
+			String TenSach = request.getParameter("searchvalue");
+			books = bookBO.findBooksByBook_title(TenSach);
+		} 
+		String Theloai = request.getParameter("searchvalue2");
+		if (Theloai != "all")
+		{
+		booklist = bookBO.findBooksById_Category(Integer.parseInt(Theloai),books); //search them 1 tieu chi thu 2 dua tren tieu chi 1
+		}
+		request.setAttribute("listbook", booklist);
+		dispatcher.forward(request, response);
+	}
 }

@@ -1,16 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<% String message = (String) request.getAttribute("message"); %>
 <!DOCTYPE HTML>
 <html lang="en" >
 <head>
 
     <meta charset="UTF-8">
     <title>Login</title>
-    <script type="text/javascript">
-    <%String message = (String)request.getAttribute("message"); %>
-    var msg = document.getElementById("message");
-    if(msg!= "null" && msg!= "" && msg!= null) alert(msg); 
+    
+    <script type="text/javascript"> 
+    function Load()
+    {
+    var msg =<%= message%>
+    if(msg!= "null" && msg!= "" && msg!= null) alert(msg);
+    }
 </script>
     <style>
 
@@ -270,9 +274,7 @@
 
     </style>
 </head>
-
-<body>
-
+<body onload="Load()">
 <form id="login" action="login" method="post">
     <h1>Log In</h1>
     <fieldset id="inputs">

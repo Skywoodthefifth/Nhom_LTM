@@ -12,7 +12,7 @@ public interface IBookDAO
     Book findBookById(int id);
     List<Book> findBooksByBook_title(String Book_title);
     List<Book> findBooksBypublisher(String publisher);
-    List<Book> findBooksById_Category(int Id_Category);
+    List<Book> findBooksById_Category(int Id_Category,List<Book> books);
     List<Book> findAllBook();
     List<Book> sortBookbypublish_date(List<Book> books);
     List<Book> sortBookbyquantity(List<Book> books);

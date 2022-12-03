@@ -20,11 +20,12 @@ public class AccountDAO implements IAccountDAO {
     private static final String FIND_ACCOUNT_BY_USERNAME = "SELECT * FROM account WHERE username=?";
     private static final String SELECT_LOGINHISTORY_BY_ID_ACCOUNT = "SELECT * FROM LOGINHISTORY where Id_Account=?";
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    Connection connection = null;
+    static Connection connection = null;
     private DBRepository dbRepository = new DBRepository();
 
     public AccountDAO() {
         connection = dbRepository.getConnection();
+        
     }
     // Them Account vao
 
@@ -66,7 +67,7 @@ public class AccountDAO implements IAccountDAO {
     public Account findAccountById(int id) {
         Account account = null;
        // return (Account) query(SELECT_ACCOUNT_BY_ID, new AccountMapper(), id);
-        try (Connection connection = this.connection) {
+        try {Connection connection = this.connection;
             PreparedStatement ps = connection.prepareStatement(SELECT_ACCOUNT_BY_ID);
             System.out.println(ps);
             ps.setInt(1, id);
@@ -89,7 +90,7 @@ public class AccountDAO implements IAccountDAO {
         List<Account> accountList = new ArrayList<>();
 //        accountList = query(SELECT_ALL_ACCOUNT, new AccountMapper());
 //        return accountList;
-        try (PreparedStatement ps = this.connection.prepareStatement(SELECT_ALL_ACCOUNT);) {
+        try {PreparedStatement ps = this.connection.prepareStatement(SELECT_ALL_ACCOUNT);
             System.out.println(ps);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -145,7 +146,7 @@ public class AccountDAO implements IAccountDAO {
     {
         
         List<Account> accounts = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_ACCOUNT_BY_USERNAME_AND_PASSWORD);){
+        try {PreparedStatement preparedStatement = connection.prepareStatement(FIND_ACCOUNT_BY_USERNAME_AND_PASSWORD);
             System.out.println(preparedStatement);
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
@@ -165,7 +166,7 @@ public class AccountDAO implements IAccountDAO {
     public Account findByUsername(String username)
     {
     	List<Account> accounts = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(FIND_ACCOUNT_BY_USERNAME);){
+        try {PreparedStatement preparedStatement = connection.prepareStatement(FIND_ACCOUNT_BY_USERNAME);
             System.out.println(preparedStatement);
             preparedStatement.setString(1, username);
             ResultSet rs = preparedStatement.executeQuery();

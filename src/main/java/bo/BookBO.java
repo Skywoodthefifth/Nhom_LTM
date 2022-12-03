@@ -57,9 +57,9 @@ public class BookBO
 	{
 		return bookDAO.findCategorybyName(Category);
 	}
-	public List<Book> findBooksById_Category(int Id_Category)
+	public List<Book> findBooksById_Category(int Id_Category,List<Book> books)
 	{
-		return bookDAO.findBooksById_Category(Id_Category);
+		return bookDAO.findBooksById_Category(Id_Category,books);
 	}
 	public boolean insertCategory(String Category)
 	{
