@@ -2,7 +2,6 @@ package bo;
 
 import bean.Book;
 import bean.BookCategory;
-import dao.AccountDAO;
 import dao.BookDAO;
 import java.util.List;
 
