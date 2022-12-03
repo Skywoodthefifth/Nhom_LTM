@@ -187,7 +187,7 @@ public class AccountDAO implements IAccountDAO {
     public List<loginhistory> getLoginHistory(int ID_Account)
     {
     	List<loginhistory> LoginHistorys = new ArrayList<>();
-    	try (Connection connection = this.connection) {
+    	try {Connection connection = this.connection;
             PreparedStatement ps = connection.prepareStatement(SELECT_LOGINHISTORY_BY_ID_ACCOUNT);
             System.out.println(ps);
             ps.setInt(1, ID_Account);
